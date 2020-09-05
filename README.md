@@ -29,24 +29,22 @@ gem 'rake-tui'
 rvm @global do gem install rake-tui
 ```
 
-### [JRuby](https://www.jruby.org/)
-
-The `rake-tui` binary uses a `ruby` shebang: `#!/usr/bin/env ruby`
-
-When using [JRuby](https://www.jruby.org/) with [RVM](https://rvm.io/), `ruby` is automatically symlinked as `jruby`, so `rake-tui` works fine.
-
-To use `rake-tui` with [JRuby](https://www.jruby.org/) without [RVM](https://rvm.io/), you must create a symlink for `ruby` pointing to `jruby` as follows:
-
-```
-ln -s $(which jruby) $(dirname $(which jruby))/ruby
-```
-
 ## Usage
 
 Simply run this command:
 
 ```
 rake-tui
+```
+
+### [JRuby](https://www.jruby.org/)
+
+If you are using [RVM](https://rvm.io/), then `rake-tui` works in [JRuby](https://www.jruby.org/) too.
+
+Otherwise, simply run this command instead:
+
+```
+jrake-tui
 ```
 
 ## Contributing to rake-tui

@@ -1,0 +1,3 @@
+#!/usr/bin/env jruby
+
+require_relative '../lib/rake-tui.rb'
