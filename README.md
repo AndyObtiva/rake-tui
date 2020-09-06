@@ -47,6 +47,13 @@ Otherwise, simply run this command instead:
 jrake-tui
 ```
 
+## TODO
+
+- Passing arguments to rake tasks that expect them
+- Windows compatibility
+- Fuzzy search filtering
+- Fill terminal window with more text when expanded from a smaller size that truncates rake task descriptions 
+
 ## Contributing to rake-tui
 
 -   Check out the latest master to make sure the feature hasn't been
