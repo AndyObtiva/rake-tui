@@ -11,10 +11,10 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0".freeze) if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib".freeze]
   s.authors = ["andy_maleh".freeze]
-  s.date = "2020-09-05"
+  s.date = "2020-09-06"
   s.description = "Rake Text-based User Interface".freeze
   s.email = "andy.am@gmail.com".freeze
-  s.executables = ["rake-tui".freeze]
+  s.executables = ["rake-tui".freeze, "jrake-tui".freeze]
   s.extra_rdoc_files = [
     "LICENSE.txt",
     "README.md"
