@@ -23,7 +23,7 @@ gem install rake-tui
 ### Bundler
 
 ```ruby
-gem 'rake-tui'
+gem 'rake-tui', require: false
 ```
 
 ### [RVM](https://rvm.io/)
@@ -37,6 +37,14 @@ rvm @global do gem install rake-tui
 Simply run this command:
 
 ```
+rakeui
+```
+
+Or one of the aliases:
+
+```
+rake-ui
+raketui
 rake-tui
 ```
 
@@ -47,15 +55,51 @@ If you are using [RVM](https://rvm.io/), then `rake-tui` works in [JRuby](https:
 Otherwise, simply run this command instead:
 
 ```
+jrakeui
+```
+
+Or one of the aliases:
+
+```
+jrake-ui
+jraketui
 jrake-tui
+```
+
+## API
+
+To use [rake-tui](https://rubygems.org/gems/rake-tui) as part of a Ruby app, require the [rake-tui](https://rubygems.org/gems/rake-tui) gem once at the top of your code:
+
+```ruby
+require 'rake-tui'
+```
+
+Afterwards, simply invoke the `Rake::TUI.run` method wherever you need to display the TUI to the user:
+
+```ruby
+Rake::TUI.run
+```
+
+If you'd rather specify or limit the tasks shown, then pass the tasks to the constructor before running:
+
+```ruby
+Rake::TUI.new(tasks).run
+```
+
+If you want to make that the default, then set the singleton instance:
+
+```ruby
+Rake::TUI.instance(Rake::TUI.new(tasks))
+Rake::TUI.run # this now displays the specified task list
 ```
 
 ## TODO
 
-- Passing arguments to rake tasks that expect them
-- Windows compatibility
-- Fuzzy search filtering
-- Fill terminal window with more text when expanded from a smaller size that truncates rake task descriptions 
+[TODO.md](TODO.md)
+
+## Change Log
+
+[CHANGELOG.md](CHANGELOG.md)
 
 ## Contributing to rake-tui
 
