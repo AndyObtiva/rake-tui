@@ -5,6 +5,9 @@
 
 ![Rake TUI Demo](rake-tui-demo.gif)
 
+Other TUI gems you may be interested in:
+- [rvm-tui](https://github.com/AndyObtiva/rvm-tui)
+
 ## Pre-requisites
 
 - [Ruby](https://www.ruby-lang.org/en/)
