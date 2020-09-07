@@ -5,6 +5,16 @@ Rake::TaskManager.record_task_metadata = true
 
 module Rake
   class TUI
+    VERSION = File.read(File.expand_path('../../../../../VERSION', __FILE__)).strip
+    BRANDING_HEADER_DEFAULT = "== rake-tui version #{VERSION} =="
+    PROMPT_QUESTION_DEFAULT = "Choose a Rake task: "
+    TASK_FORMATTER_DEFAULT = lambda do |task, tasks|
+      max_task_size = tasks.map(&:name_with_args).map(&:size).max + 1
+      line = "rake #{task.name_with_args.ljust(max_task_size)} # #{task.comment}"
+      bound = TTY::Screen.width - 6
+      line.size <= bound ? line : "#{line[0..(bound - 3)]}..."
+    end
+  
     class << self
       # Singleton instance (if argument is specified, it is used to set instance)
       def instance(tui=nil)
@@ -15,13 +25,22 @@ module Rake
         end
       end
       
-      # Run TUI (recommended for general use)
-      def run
-        instance.run
+      # Runs TUI (recommended for general use)
+      #
+      # Optionally takes a `branding_header` to customize the branding header or take it off when set to `nil`.
+      #
+      # Optionally takes a `prompt_question` to customize the question for selecting a rake task.
+      #
+      # Optionally pass a task_formatter mapping block to
+      # transform every rake task line into a different format
+      # e.g. Rake::TUI.new.run { |task, tasks| task.name_with_args }
+      # This makes tasks show up without `rake` prefix or `# description` suffix  
+      def run(branding_header: BRANDING_HEADER_DEFAULT, prompt_question: PROMPT_QUESTION_DEFAULT, &task_formatter)
+        instance.run(branding_header: branding_header, prompt_question: prompt_question, &task_formatter)
       end
     end
     
-    # Initialize a new TUI object
+    # Initializes a new TUI object
     def initialize(tasks=Rake.application.tasks)
       if tasks.empty?
         Rake.application.init
@@ -29,20 +48,23 @@ module Rake
         tasks = Rake.application.tasks
       end
       
-      tasks = tasks.reject {|task| task.comment.nil?}
-
-      max_task_size = !tasks.empty? && (tasks.map(&:name_with_args).map(&:size).max + 1)
-      @rake_task_lines = tasks.map do |task| 
-        "rake #{task.name_with_args.ljust(max_task_size)} # #{task.comment}"
-      end
+      @tasks = tasks.reject {|task| task.comment.nil?}
     end
   
-    # Run TUI
-    def run  
-      version = File.read(File.expand_path('../../../../../VERSION', __FILE__)).strip
-      puts "== rake-tui version #{version} =="
+    # Runs TUI
+    #
+    # Optionally takes a `branding_header` to customize the branding header or take it off when set to `nil`.
+    #
+    # Optionally takes a `prompt_question` to customize the question for selecting a rake task.
+    #
+    # Optionally takes a `task_formatter` mapping block to
+    # transform every rake task line into a different format
+    # e.g. Rake::TUI.new.run { |task, tasks| task.name_with_args }
+    # This makes tasks show up without `rake` prefix or `# description` suffix  
+    def run(branding_header: BRANDING_HEADER_DEFAULT, prompt_question: PROMPT_QUESTION_DEFAULT, &task_formatter)
+      puts branding_header unless branding_header.nil?
           
-      unless @rake_task_lines&.detect {|l| l.start_with?('rake ')}
+      if @tasks.empty?
         puts "No Rake tasks found!"
         puts "Exiting..."
         exit(0)
@@ -58,12 +80,10 @@ module Rake
         exit(0)
       end
       
-      begin
-        rake_task_lines = @rake_task_lines.map do |line| 
-          bound = TTY::Screen.width - 6
-          line.size <= bound ? line : "#{line[0..(bound - 3)]}..."
-        end
-        rake_task_line = prompt.select("Choose a Rake task: ", rake_task_lines, cycle: true, per_page: [TTY::Screen.height - 5, 1].max, filter: true, show_help: :always, help: "(Press ↑/↓ arrow to move, Enter to select, CTRL+Enter to run without arguments, and letters to filter)") do |list|
+      begin      
+        task_formatter ||= TASK_FORMATTER_DEFAULT
+        rake_task_lines = @tasks.map {|task, tasks| task_formatter.call(task, @tasks)}
+        rake_task_line = prompt.select(prompt_question, rake_task_lines, cycle: true, per_page: [TTY::Screen.height - 5, 1].max, filter: true, show_help: :always) do |list|
           list.singleton_class.define_method(:keyspace) do |event|
             return unless filterable?
       
@@ -74,9 +94,9 @@ module Rake
           end
         end
         
-        rake_task_with_args = rake_task_line.split('#').first.strip.split[1]
-        rake_task, rake_task_arg_names = rake_task_with_args.sub(']', '').split('[')
-        rake_task_arg_names = rake_task_arg_names&.split(',').to_a
+        selected_task = @tasks[rake_task_lines.index(rake_task_line)]
+        rake_task = selected_task.name
+        rake_task_arg_names = selected_task.arg_names
         rake_task_arg_values = rake_task_arg_names.map do |rake_task_arg_name|
           prompt.ask("Enter [#{rake_task_arg_name}] (default=nil):")
         end

@@ -93,6 +93,123 @@ Rake::TUI.instance(Rake::TUI.new(tasks))
 Rake::TUI.run # this now displays the specified task list
 ```
 
+## Options
+
+### `branding_header`
+
+The default branding header looks like this (from `Rake::TUI::BRANDING_HEADER_DEFAULT`):
+
+```
+== rake-tui version 0.2.1 ==
+```
+
+It may be customized by passing in the `branding_header` option (removed when set to `nil`).
+
+Example:
+
+```ruby
+Rake::TUI.run(branding_header: '== Glimmer (Ruby Desktop Development GUI Library) ==')
+```
+
+Output:
+
+```
+== Glimmer (Ruby Desktop Development GUI Library) ==
+```
+
+### `prompt_question`
+
+The prompt question is the text that shows up before the help message and looks like this (from `Rake::TUI::PROMPT_QUESTION_DEFAULT`):
+
+```
+Choose a Rake task:
+```
+
+It may be customized by passing in the `prompt_question` option:
+
+Example:
+
+```ruby
+Rake::TUI.run(prompt_question: 'Select a Glimmer task:')
+```
+
+Output:
+
+```
+Choose a Rake task:  (Press ↑/↓ arrow to move, Enter to select and letters to filter)
+```
+
+### `task_formatter` block
+
+The task formatter (default: `Rake::TUI::TASK_FORMATTER_DEFAULT`) is responsible for formatting
+tasks into task lines presented as choices to the user.
+
+It receives `task` and `tasks` list as options.
+
+For example, by default, it prints the same standard output you see from running `rake -T`:
+
+```
+  rake build               # Build gem into pkg/
+  rake clean               # Remove any temporary products
+  rake clobber             # Remove any generated files
+  rake clobber_rdoc        # Remove RDoc HTML files
+  rake console[script]     # Start IRB with all runtime dependencies loaded
+  rake gemcutter:release   # Release gem to Gemcutter
+  rake gemspec             # Generate and validate gemspec
+  rake gemspec:debug       # Display the gemspec for debugging purposes, as juwelier knows it (not from the filesystem)
+  rake gemspec:generate    # Regenerate the gemspec on the filesystem
+‣ rake gemspec:release     # Regenerate and validate gemspec, and then commits and pushes to git
+  rake gemspec:validate    # Validates the gemspec on the filesystem
+  rake git:release         # Tag and push release to git
+  rake install             # Build and install gem using `gem install`
+  rake rdoc                # Build RDoc HTML files
+  rake release             # Release gem
+  rake rerdoc              # Rebuild RDoc HTML files
+  rake simplecov           # Code coverage detail
+  rake spec                # Run RSpec code examples
+  rake version             # Displays the current version
+  rake version:bump:major  # Bump the major version by 1
+  rake version:bump:minor  # Bump the a minor version by 1
+  rake version:bump:patch  # Bump the patch version by 1
+  rake version:write       # Writes out an explicit version
+```
+
+However, it can be customized by passing in a `task_formatter` block.
+
+Example:
+
+```ruby
+Rake::TUI.new.run { |task, tasks| task.name_with_args }
+```
+
+Output:
+
+```
+  build
+  clean
+  clobber
+  clobber_rdoc
+  console[script]
+  gemcutter:release
+  gemspec
+  gemspec:debug
+  gemspec:generate
+  gemspec:release
+  gemspec:validate
+  git:release
+  install
+  rdoc
+‣ release
+  rerdoc
+  simplecov
+  spec
+  version
+  version:bump:major
+  version:bump:minor
+  version:bump:patch
+  version:write
+```
+
 ## TODO
 
 [TODO.md](TODO.md)

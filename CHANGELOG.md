@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.2.1
+
+- `branding_header`, `prompt_question`, and `task_formatter` block options
+
 ## 0.2.0
 
 - Optimized performance for JRuby
