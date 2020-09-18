@@ -136,7 +136,7 @@ Rake::TUI.run(prompt_question: 'Select a Glimmer task:')
 Output:
 
 ```
-Choose a Rake task:  (Press ↑/↓ arrow to move, Enter to select and letters to filter)
+Select a Glimmer task:  (Press ↑/↓ arrow to move, Enter to select and letters to filter)
 ```
 
 ### `task_formatter` block
