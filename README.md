@@ -100,7 +100,7 @@ Rake::TUI.run # this now displays the specified task list
 The default branding header looks like this (from `Rake::TUI::BRANDING_HEADER_DEFAULT`):
 
 ```
-== rake-tui version 0.2.2 ==
+== rake-tui version 0.2.3 ==
 ```
 
 It may be customized by passing in the `branding_header` option (removed when set to `nil`).

@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.2.3
+
+- Fixed issue with adding rake task list twice
+
 ## 0.2.2
 
 - Improve compatibility with older tty-prompt v0.21.0 by setting select choices via block argument when using a block
