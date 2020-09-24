@@ -21,7 +21,7 @@ Juwelier::Tasks.new do |gem|
   gem.email = "andy.am@gmail.com"
   gem.authors = ["andy_maleh"]
   gem.executables = ['rake-tui', 'jrake-tui', 'raketui', 'jraketui', 'rake-ui', 'jrake-ui', 'rakeui', 'jrakeui']
-  gem.files = Dir['README.md', 'LICENSE*', 'CHANGELOG.md', 'VERSION', 'bin/**/*', 'lib/**/*']
+  gem.files = Dir['README.md', 'LICENSE*', 'CHANGELOG.md', 'VERSION', 'rake-tui.gemspec', 'bin/**/*', 'lib/**/*']
   
   # dependencies defined in Gemfile
 end

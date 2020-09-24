@@ -73,7 +73,7 @@ module Rake
       require 'tty-prompt'
       
       prompt = TTY::Prompt.new
-      
+
       prompt.on(:keyescape) do |event|
         puts # a new line is needed
         puts "Exiting..."
@@ -84,6 +84,7 @@ module Rake
         task_formatter ||= TASK_FORMATTER_DEFAULT
         rake_task_lines = @tasks.map {|task, tasks| task_formatter.call(task, @tasks)}
         rake_task_line = prompt.select(prompt_question, rake_task_lines, cycle: true, per_page: [TTY::Screen.height - 5, 1].max, filter: true, show_help: :always) do |list|
+          list.choices rake_task_lines
           list.singleton_class.define_method(:keyspace) do |event|
             return unless filterable?
       

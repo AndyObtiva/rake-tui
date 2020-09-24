@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.2.2
+
+- Improve compatibility with older tty-prompt v0.21.0 by setting select choices via block argument when using a block
+
 ## 0.2.1
 
 - `branding_header`, `prompt_question`, and `task_formatter` block options
