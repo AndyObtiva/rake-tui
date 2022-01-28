@@ -7,6 +7,7 @@
 
 Other TUI gems you may be interested in:
 - [rvm-tui](https://github.com/AndyObtiva/rvm-tui)
+- [git-tui](https://github.com/AndyObtiva/git-tui)
 
 ## Pre-requisites
 
